@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RXZlist - FameList комьюнити</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(to bottom, #1a1a1a 0%, #121212 100%);
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: #1e1e1e;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    .search-bar {
+      flex: 1;
+      margin: 0 20px;
+      position: relative;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 12px 20px;
+      border-radius: 30px;
+      border: none;
+      background: #2a2a2a;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .search-bar input::placeholder {
+      color: #aaa;
+    }
+
+    .search-bar input:focus {
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+      background: #333;
+    }
+
+    .menu-btn {
+      width: 40px;
+      height: 40px;
+      background: #2a2a2a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .menu-btn div {
+      width: 24px;
+      height: 3px;
+      background: #fff;
+      margin: 3px 0;
+    }
+
+    .user-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .user-card {
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .user-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .user-header {
+      position: relative;
+      height: 160px;
+      background: #2a2a2a;
+      overflow: hidden;
+    }
+
+    .user-header img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .tag {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      z-index: 2;
+    }
+
+    .avatar {
+      position: absolute;
+      top: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid #1e1e1e;
+      background: #1e1e1e;
+      overflow: hidden;
+      z-index: 3;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .user-info {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .user-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .user-nick {
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px;
+      color: #aaa;
+      font-size: 1.2rem;
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .header {
+        flex-direction: column;
+        gap: 15px;
+      }
+      .search-bar {
+        margin: 0;
+      }
+      .user-header {
+        height: 140px;
+      }
+      .avatar {
+        top: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <span>RXZlist - FameList комьюнити</span>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Поиск пользователей..." />
+    </div>
+    <div class="menu-btn">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+  <div class="user-grid" id="userGrid">
+    <!-- Карточка 1 -->
+    <div class="user-card" data-name="fresov" data-nick="coxprince">
+      <div class="user-header">
+        <img src="https://via.placeholder.com/400x200/000000/FFFFFF?text=Арт+Владельца" alt="Фон" />
+        <div class="tag">Владелец</div>
+        <div class="avatar">
+          <img src="coxprince.jpg" alt="Аватар Дисонова" />
+        </div>
+      </div>
+      <div class="user-info">
+        <div class="user-name">fresov - @coxprince</div>
+        <div class="user-nick">@coxprince</div>
+      </div>
+    </div>
+
+    <!-- Карточка 2 -->
+    <div class="user-card" data-name="аид" data-nick="ramphades">
+      <div class="user-header">
+        <img src="https://via.placeholder.com/400x200/000000/FFFFFF?text=Пиксель" alt="Фон" />
+        <div class="tag">Владелец</div>
+        <div class="avatar">
+          <img src="ramphades.jpg" alt="Аватар Зика" />
+        </div>
+      </div>
+      <div class="user-info">
+        <div class="user-name">аид - @ramphades</div>
+        <div class="user-nick">@ramphades</div>
+      </div>
+    </div>
+
+    <!-- Карточка 3: лордик -->
+    <div class="user-card" data-name="лордик" data-nick="musiclordik">
+      <div class="user-header">
+        <img src="https://via.placeholder.com/400x200/222222/FFFFFF?text=Медиа+Бэк" alt="Фон" />
+        <div class="tag">Медиа</div>
+        <div class="avatar">
+          <img src="lordik.jpg" alt="Аватар Лордика" />
+        </div>
+      </div>
+      <div class="user-info">
+        <div class="user-name">лордик - @musiclordik</div>
+        <div class="user-nick">@musiclordik</div>
+      </div>
+    </div>
+
+    <!-- Карточка 4: николай -->
+    <div class="user-card" data-name="николай" data-nick="nucenu">
+      <div class="user-header">
+        <img src="https://via.placeholder.com/400x200/333333/FFFFFF?text=Медиа+Бэк2" alt="Фон" />
+        <div class="tag">Медиа</div>
+        <div class="avatar">
+          <img src="nucenu.jpg" alt="Аватар Николая" />
+        </div>
+      </div>
+      <div class="user-info">
+        <div class="user-name">николай - @nucenu</div>
+        <div class="user-nick">@nucenu</div>
+      </div>
+    </div>
+
+    <!-- Карточка 5: loxssy -->
+    <div class="user-card" data-name="loxssy" data-nick="aftter">
+      <div class="user-header">
+        <img src="https://via.placeholder.com/400x200/444444/FFFFFF?text=Медиа+Бэк3" alt="Фон" />
+        <div class="tag">Медиа</div>
+        <div class="avatar">
+          <img src="loksi.jpg" alt="Аватар Loxssy" />
+        </div>
+      </div>
+      <div class="user-info">
+        <div class="user-name">loxssy - @aftter</div>
+        <div class="user-nick">@aftter</div>
+      </div>
+    </div>
+
+    <!-- Карточка 6: wawilon -->
+    <div class="user-card" data-name="wawilon" data-nick="wawilon">
+      <div class="user-header">
+        <img src="https://via.placeholder.com/400x200/555555/FFFFFF?text=Медиа+Бэк4" alt="Фон" />
+        <div class="tag">Медиа</div>
+        <div class="avatar">
+          <img src="wawilon.jpg" alt="Аватар Wawilon" />
+        </div>
+      </div>
+      <div class="user-info">
+        <div class="user-name">wawilon - @wawilon</div>
+        <div class="user-nick">@wawilon</div>
+      </div>
+    </div>
+
+    <!-- Карточка 7: шат -->
+    <div class="user-card" data-name="шат" data-nick="osintshat">
+      <div class="user-header">
+        <img src="https://via.placeholder.com/400x200/666666/FFFFFF?text=Медиа+Бэк5" alt="Фон" />
+        <div class="tag">Медиа</div>
+        <div class="avatar">
+          <img src="shat.jpg" alt="Аватар Шата" />
+        </div>
+      </div>
+      <div class="user-info">
+        <div class="user-name">шат - @osintshat</div>
+        <div class="user-nick">@osintshat</div>
+      </div>
+    </div>
+
+    <!-- Карточка 8: троффи -->
+    <div class="user-card" data-name="троффи" data-nick="trofingood">
+      <div class="user-header">
+        <img src="https://via.placeholder.com/400x200/777777/FFFFFF?text=Медиа+Бэк6" alt="Фон" />
+        <div class="tag">Медиа</div>
+        <div class="avatar">
+          <img src="trofi.jpg" alt="Аватар Троффи" />
+        </div>
+      </div>
+      <div class="user-info">
+        <div class="user-name">троффи - @trofingood</div>
+        <div class="user-nick">@trofingood</div>
+      </div>
+    </div>
+
+    <!-- Карточка 9: лицемерия -->
+    <div class="user-card" data-name="лицемерия" data-nick="dimulation">
+      <div class="user-header">
+        <img src="https://via.placeholder.com/400x200/882222/FFFFFF?text=Большой+Фейм" alt="Фон" />
+        <div class="tag">Большой фейм</div>
+        <div class="avatar">
+          <img src="dimulation.jpg" alt="Аватар Лицемерии" />
+        </div>
+      </div>
+      <div class="user-info">
+        <div class="user-name">лицемерия - @dimulation</div>
+        <div class="user-nick">@dimulation</div>
+      </div>
+    </div>
+
+    <!-- Сообщение, если ничего не найдено -->
+    <div class="no-results" id="noResults">Пользователь не найден</div>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const userCards = document.querySelectorAll('.user-card:not(.no-results)');
+    const noResultsMessage = document.getElementById('noResults');
+
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.trim().toLowerCase();
+      let found = false;
+
+      userCards.forEach(card => {
+        const name = card.getAttribute('data-name')?.toLowerCase() || '';
+        const nick = card.getAttribute('data-nick')?.toLowerCase() || '';
+
+        if (name.includes(query) || nick.includes(query)) {
+          card.style.display = '';
+          found = true;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      noResultsMessage.style.display = found ? 'none' : 'block';
+    });
+  </script>
+</body>
+</html>
