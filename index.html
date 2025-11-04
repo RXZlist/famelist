@@ -5,6 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RXZlist - FameList комьюнити</title>
   <style>
+    :root {
+      --bg-gradient: linear-gradient(to bottom, #1a1a1a 0%, #121212 100%);
+      --card-bg: #1e1e1e;
+      --header-bg: #1e1e1e;
+      --search-bg: #2a2a2a;
+      --menu-bg: #1e1e1e;
+      --modal-bg: #1e1e1e;
+      --text-color: #fff;
+      --secondary-text: #aaa;
+      --shadow: rgba(0, 0, 0, 0.5);
+      --accent: #333;
+      --check-bg: #333;
+      --check-color: #fff;
+    }
+
+    .theme-purple {
+      --bg-gradient: linear-gradient(to bottom, #2a1a40 0%, #1a0f2a 100%);
+      --card-bg: #251736;
+      --header-bg: #251736;
+      --search-bg: #3a264d;
+      --menu-bg: #251736;
+      --modal-bg: #251736;
+      --accent: #4a2c60;
+      --check-bg: #4a2c60;
+      --check-color: #fff;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -12,11 +39,12 @@
     }
 
     body {
-      background: linear-gradient(to bottom, #1a1a1a 0%, #121212 100%);
-      color: #fff;
+      background: var(--bg-gradient);
+      color: var(--text-color);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       padding: 20px;
       line-height: 1.6;
+      transition: background 0.3s ease;
     }
 
     .header {
@@ -24,11 +52,11 @@
       justify-content: space-between;
       align-items: center;
       padding: 15px 20px;
-      background: #1e1e1e;
+      background: var(--header-bg);
       border-radius: 12px;
       margin-bottom: 20px;
       backdrop-filter: blur(10px);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 20px var(--shadow);
     }
 
     .logo {
@@ -37,12 +65,6 @@
       display: flex;
       align-items: center;
       gap: 8px;
-    }
-
-    .logo img {
-      width: 32px;
-      height: 32px;
-      object-fit: contain;
     }
 
     .search-bar {
@@ -56,40 +78,104 @@
       padding: 12px 20px;
       border-radius: 30px;
       border: none;
-      background: #2a2a2a;
-      color: #fff;
+      background: var(--search-bg);
+      color: var(--text-color);
       font-size: 1rem;
       outline: none;
       transition: box-shadow 0.3s ease;
     }
 
     .search-bar input::placeholder {
-      color: #aaa;
+      color: var(--secondary-text);
     }
 
     .search-bar input:focus {
       box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
-      background: #333;
+      background: var(--accent);
     }
 
     .menu-btn {
       width: 40px;
       height: 40px;
-      background: #2a2a2a;
+      background: var(--search-bg);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      position: relative;
+      z-index: 10;
     }
 
     .menu-btn div {
       width: 24px;
       height: 3px;
-      background: #fff;
+      background: var(--text-color);
       margin: 3px 0;
     }
 
+    /* Меню */
+    .menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 100vh;
+      background: var(--menu-bg);
+      box-shadow: -5px 0 15px var(--shadow);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 20;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .menu.active {
+      transform: translateX(0);
+    }
+
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #333;
+      margin-bottom: 20px;
+    }
+
+    .menu-header h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .menu-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text-color);
+      cursor: pointer;
+    }
+
+    .menu-item {
+      padding: 12px 15px;
+      background: var(--search-bg);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-color);
+    }
+
+    .menu-item:hover {
+      background: var(--accent);
+    }
+
+    /* Карточки пользователей */
     .user-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -97,11 +183,11 @@
     }
 
     .user-card {
-      background: #1e1e1e;
+      background: var(--card-bg);
       border-radius: 12px;
       overflow: hidden;
       transition: transform 0.2s ease, box-shadow 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 12px var(--shadow);
     }
 
     .user-card:hover {
@@ -112,7 +198,6 @@
     .user-header {
       position: relative;
       height: 160px;
-      background: #2a2a2a;
       overflow: hidden;
     }
 
@@ -120,6 +205,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      filter: blur(8px);
     }
 
     .tag {
@@ -127,7 +213,7 @@
       top: 10px;
       right: 10px;
       background: rgba(0, 0, 0, 0.6);
-      color: #fff;
+      color: var(--text-color);
       padding: 4px 10px;
       border-radius: 15px;
       font-size: 0.8rem;
@@ -143,8 +229,8 @@
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      border: 3px solid #1e1e1e;
-      background: #1e1e1e;
+      border: 3px solid var(--card-bg);
+      background: var(--card-bg);
       overflow: hidden;
       z-index: 3;
       box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
@@ -154,6 +240,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      filter: none;
     }
 
     .user-info {
@@ -168,7 +255,7 @@
     }
 
     .user-nick {
-      color: #aaa;
+      color: var(--secondary-text);
       font-size: 0.9rem;
     }
 
@@ -176,9 +263,131 @@
       grid-column: 1 / -1;
       text-align: center;
       padding: 40px;
-      color: #aaa;
+      color: var(--secondary-text);
       font-size: 1.2rem;
       display: none;
+    }
+
+    /* Модальное окно настроек */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: var(--modal-bg);
+      padding: 24px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 320px;
+      box-shadow: 0 8px 30px var(--shadow);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h3 {
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    .settings-section {
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theme-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .theme-option {
+      position: relative;
+      padding: 12px;
+      background: var(--search-bg);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theme-option:hover {
+      background: var(--accent);
+    }
+
+    .theme-preview {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .theme-preview span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .theme-label {
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .checkmark {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 20px;
+      height: 20px;
+      background: var(--check-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--check-color);
+      font-size: 0.8rem;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .theme-option.selected .checkmark {
+      opacity: 1;
     }
 
     @media (max-width: 600px) {
@@ -195,6 +404,9 @@
       .avatar {
         top: 80px;
       }
+      .menu {
+        width: 250px;
+      }
     }
   </style>
 </head>
@@ -206,10 +418,55 @@
     <div class="search-bar">
       <input type="text" id="searchInput" placeholder="Поиск пользователей..." />
     </div>
-    <div class="menu-btn">
+    <div class="menu-btn" id="menuBtn">
       <div></div>
       <div></div>
       <div></div>
+    </div>
+  </div>
+
+  <!-- Меню -->
+  <div class="menu" id="menu">
+    <div class="menu-header">
+      <h2>Меню</h2>
+      <button class="menu-close" id="menuClose">×</button>
+    </div>
+    <div class="menu-item" id="settingsItem">Настройки</div>
+    <a href="https://t.me/+NzZT3uspU19iMTcy" target="_blank" class="menu-item">Подать заявку</a>
+  </div>
+
+  <!-- Модальное окно настроек -->
+  <div class="modal" id="settingsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Настройки</h3>
+        <button class="modal-close" id="settingsClose">×</button>
+      </div>
+      <div class="settings-section">
+        <div class="section-title">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+          Выбор темы
+        </div>
+        <p style="margin-bottom: 15px; color: var(--secondary-text);">Выберите цветовую схему, которая вам больше нравится</p>
+        <div class="theme-options">
+          <div class="theme-option selected" data-theme="black">
+            <div class="theme-preview">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="theme-label">Черная</div>
+            <div class="checkmark">✓</div>
+          </div>
+          <div class="theme-option" data-theme="purple">
+            <div class="theme-preview" style="background: linear-gradient(45deg, #6a0dad, #8b008b);">
+              <span style="background: rgba(255,255,255,0.7);"></span><span style="background: rgba(255,255,255,0.7);"></span><span style="background: rgba(255,255,255,0.7);"></span>
+            </div>
+            <div class="theme-label">Фиолетовая</div>
+            <div class="checkmark">✓</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -217,7 +474,7 @@
     <!-- Карточка 1 -->
     <div class="user-card" data-name="fresov" data-nick="coxprince">
       <div class="user-header">
-        <img src="https://via.placeholder.com/400x200/000000/FFFFFF?text=Арт+Владельца" alt="Фон" />
+        <img src="coxprince.jpg" alt="Фон" />
         <div class="tag">Владелец</div>
         <div class="avatar">
           <img src="coxprince.jpg" alt="Аватар фресова" />
@@ -232,7 +489,7 @@
     <!-- Карточка 2 -->
     <div class="user-card" data-name="аид" data-nick="ramphades">
       <div class="user-header">
-        <img src="https://via.placeholder.com/400x200/000000/FFFFFF?text=Пиксель" alt="Фон" />
+        <img src="ramphades.jpg" alt="Фон" />
         <div class="tag">Владелец</div>
         <div class="avatar">
           <img src="ramphades.jpg" alt="Аватар аида" />
@@ -247,7 +504,7 @@
     <!-- Карточка 3: лордик -->
     <div class="user-card" data-name="лордик" data-nick="musiclordik">
       <div class="user-header">
-        <img src="https://via.placeholder.com/400x200/222222/FFFFFF?text=Медиа+Бэк" alt="Фон" />
+        <img src="lordik.jpg" alt="Фон" />
         <div class="tag">Медиа</div>
         <div class="avatar">
           <img src="lordik.jpg" alt="Аватар Лордика" />
@@ -262,7 +519,7 @@
     <!-- Карточка 4: николай -->
     <div class="user-card" data-name="николай" data-nick="nucenu">
       <div class="user-header">
-        <img src="https://via.placeholder.com/400x200/333333/FFFFFF?text=Медиа+Бэк2" alt="Фон" />
+        <img src="nucenu.jpg" alt="Фон" />
         <div class="tag">Медиа</div>
         <div class="avatar">
           <img src="nucenu.jpg" alt="Аватар Николая" />
@@ -277,7 +534,7 @@
     <!-- Карточка 5: loxssy -->
     <div class="user-card" data-name="loxssy" data-nick="aftter">
       <div class="user-header">
-        <img src="https://via.placeholder.com/400x200/444444/FFFFFF?text=Медиа+Бэк3" alt="Фон" />
+        <img src="loksi.jpg" alt="Фон" />
         <div class="tag">Медиа</div>
         <div class="avatar">
           <img src="loksi.jpg" alt="Аватар Loxssy" />
@@ -292,7 +549,7 @@
     <!-- Карточка 6: wawilon -->
     <div class="user-card" data-name="wawilon" data-nick="wawilon">
       <div class="user-header">
-        <img src="https://via.placeholder.com/400x200/555555/FFFFFF?text=Медиа+Бэк4" alt="Фон" />
+        <img src="wawilon.jpg" alt="Фон" />
         <div class="tag">Медиа</div>
         <div class="avatar">
           <img src="wawilon.jpg" alt="Аватар Wawilon" />
@@ -307,7 +564,7 @@
     <!-- Карточка 7: шат -->
     <div class="user-card" data-name="шат" data-nick="osintshat">
       <div class="user-header">
-        <img src="https://via.placeholder.com/400x200/666666/FFFFFF?text=Медиа+Бэк5" alt="Фон" />
+        <img src="shat.jpg" alt="Фон" />
         <div class="tag">Медиа</div>
         <div class="avatar">
           <img src="shat.jpg" alt="Аватар Шата" />
@@ -322,7 +579,7 @@
     <!-- Карточка 8: троффи -->
     <div class="user-card" data-name="троффи" data-nick="trofingood">
       <div class="user-header">
-        <img src="https://via.placeholder.com/400x200/777777/FFFFFF?text=Медиа+Бэк6" alt="Фон" />
+        <img src="trofi.jpg" alt="Фон" />
         <div class="tag">Медиа</div>
         <div class="avatar">
           <img src="trofi.jpg" alt="Аватар Троффи" />
@@ -337,7 +594,7 @@
     <!-- Карточка 9: лицемерия -->
     <div class="user-card" data-name="лицемерия" data-nick="dimulation">
       <div class="user-header">
-        <img src="https://via.placeholder.com/400x200/882222/FFFFFF?text=Большой+Фейм" alt="Фон" />
+        <img src="dimulation.jpg" alt="Фон" />
         <div class="tag">Большой фейм</div>
         <div class="avatar">
           <img src="dimulation.jpg" alt="Аватар Лицемерии" />
@@ -376,6 +633,92 @@
 
       noResultsMessage.style.display = found ? 'none' : 'block';
     });
+
+    // Меню
+    const menuBtn = document.getElementById('menuBtn');
+    const menu = document.getElementById('menu');
+    const menuClose = document.getElementById('menuClose');
+
+    menuBtn.addEventListener('click', () => {
+      menu.classList.add('active');
+    });
+
+    menuClose.addEventListener('click', () => {
+      menu.classList.remove('active');
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!menu.contains(event.target) && !menuBtn.contains(event.target)) {
+        menu.classList.remove('active');
+      }
+    });
+
+    // Настройки
+    const settingsItem = document.getElementById('settingsItem');
+    const settingsModal = document.getElementById('settingsModal');
+    const settingsClose = document.getElementById('settingsClose');
+
+    settingsItem.addEventListener('click', () => {
+      menu.classList.remove('active');
+      settingsModal.style.display = 'flex';
+    });
+
+    settingsClose.addEventListener('click', () => {
+      settingsModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === settingsModal) {
+        settingsModal.style.display = 'none';
+      }
+    });
+
+    // Выбор темы
+    const themeOptions = document.querySelectorAll('.theme-option');
+    const body = document.body;
+
+    themeOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        // Снимаем выделение со всех
+        themeOptions.forEach(opt => opt.classList.remove('selected'));
+        // Добавляем выделение текущему
+        option.classList.add('selected');
+
+        // Применяем тему
+        if (option.dataset.theme === 'black') {
+          body.classList.remove('theme-purple');
+          localStorage.setItem('theme', 'black');
+        } else if (option.dataset.theme === 'purple') {
+          body.classList.add('theme-purple');
+          localStorage.setItem('theme', 'purple');
+        }
+      });
+    });
+
+    // Загрузка сохранённой темы при открытии страницы
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'purple') {
+        body.classList.add('theme-purple');
+        // Также обновляем выделение в интерфейсе
+        document.querySelector('[data-theme="purple"]').classList.add('selected');
+        document.querySelector('[data-theme="black"]').classList.remove('selected');
+      } else {
+        // По умолчанию — черная
+        body.classList.remove('theme-purple');
+        document.querySelector('[data-theme="black"]').classList.add('selected');
+        document.querySelector('[data-theme="purple"]').classList.remove('selected');
+      }
+
+      // Гарантируем, что фон = аватарка
+      userCards.forEach(card => {
+        const avatar = card.querySelector('.avatar img');
+        const bg = card.querySelector('.user-header img');
+        if (avatar && bg) {
+          bg.src = avatar.src;
+        }
+      });
+    });
   </script>
 </body>
-</html>
+  </html>
