@@ -606,6 +606,36 @@
       </div>
     </div>
 
+    <!-- Карточка 10: Paradox -->
+    <div class="user-card" data-name="paradox" data-nick="runetparadox">
+      <div class="user-header">
+        <img src="paradox.jpg" alt="Фон" />
+        <div class="tag">Фейм</div>
+        <div class="avatar">
+          <img src="paradox.jpg" alt="Аватар Paradox" />
+        </div>
+      </div>
+      <div class="user-info">
+        <div class="user-name">Paradox - @RunetParadox</div>
+        <div class="user-nick">@RunetParadox</div>
+      </div>
+    </div>
+
+    <!-- Карточка 11: Илюша Крушвицов -->
+    <div class="user-card" data-name="илюша крошвицов илюша крошвицов илюша крошвицов" data-nick="pia6en">
+      <div class="user-header">
+        <img src="Iluha.jpg" alt="Фон" />
+        <div class="tag">Средний фейм</div>
+        <div class="avatar">
+          <img src="Iluha.jpg" alt="Аватар Илюши" />
+        </div>
+      </div>
+      <div class="user-info">
+        <div class="user-name">Илюша Крушвицов - @pia6en</div>
+        <div class="user-nick">@pia6en</div>
+      </div>
+    </div>
+
     <!-- Сообщение, если ничего не найдено -->
     <div class="no-results" id="noResults">Пользователь не найден</div>
   </div>
@@ -679,12 +709,9 @@
 
     themeOptions.forEach(option => {
       option.addEventListener('click', () => {
-        // Снимаем выделение со всех
         themeOptions.forEach(opt => opt.classList.remove('selected'));
-        // Добавляем выделение текущему
         option.classList.add('selected');
 
-        // Применяем тему
         if (option.dataset.theme === 'black') {
           body.classList.remove('theme-purple');
           localStorage.setItem('theme', 'black');
@@ -695,22 +722,20 @@
       });
     });
 
-    // Загрузка сохранённой темы при открытии страницы
+    // Загрузка темы при старте
     document.addEventListener('DOMContentLoaded', () => {
       const savedTheme = localStorage.getItem('theme');
       if (savedTheme === 'purple') {
         body.classList.add('theme-purple');
-        // Также обновляем выделение в интерфейсе
         document.querySelector('[data-theme="purple"]').classList.add('selected');
         document.querySelector('[data-theme="black"]').classList.remove('selected');
       } else {
-        // По умолчанию — черная
         body.classList.remove('theme-purple');
         document.querySelector('[data-theme="black"]').classList.add('selected');
         document.querySelector('[data-theme="purple"]').classList.remove('selected');
       }
 
-      // Гарантируем, что фон = аватарка
+      // Устанавливаем фон = аватарка
       userCards.forEach(card => {
         const avatar = card.querySelector('.avatar img');
         const bg = card.querySelector('.user-header img');
@@ -721,4 +746,4 @@
     });
   </script>
 </body>
-  </html>
+</html>
